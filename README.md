@@ -97,11 +97,11 @@ With 35 sessions open (a few GB just for them), plus one session running twenty 
 
 Usage limits are the real budget. What we learned:
 
-- **Know your numbers every pass.** Have the operator read 5-hour %, weekly %, per-model weekly %, and extra-usage % before starting sessions or sub-agents. (claude-usage-meter (coming soon) gives you a menu-bar dot.)
+- **Know your numbers every pass.** Have the operator read 5-hour %, weekly %, per-model weekly %, and extra-usage % before starting sessions or sub-agents. ([claude-local-first](https://github.com/tsmartin29/claude-local-first) includes a menu-bar usage meter.)
 - **Three bands.** Green: work normally. Amber (5-hour at 80 %+, weekly at 85 %+, extra usage at 90 %+): hand routine work (copy, reports, research, sorting files) to a cheaper route, run sub-agents only on small/mid models, start no new top-model sessions for routine work. Red (5-hour or extra usage at 100 %): the best model is for release-critical work only.
 - **Never cheap mode for** builds, releases, installers, native or realtime code, or anything that needs connectors (cheap mode has none). Those wait for Claude.
 - **A separate per-model allowance is free headroom.** If one model has its own weekly allowance, use it first and fall back to the normal model when it is used up or unavailable. Do not stall work waiting for it.
-- **Cheap mode, properly isolated.** A launcher (claude-relay (coming soon)) points Claude Code at OpenRouter with a clean environment (`env -i`), because otherwise your Claude login could be sent to the other endpoint. Keys live in the Keychain, never in files.
+- **Cheap mode, properly isolated.** A launcher (part of [claude-local-first](https://github.com/tsmartin29/claude-local-first)) points Claude Code at OpenRouter with a clean environment (`env -i`), because otherwise your Claude login could be sent to the other endpoint. Keys live in the Keychain, never in files.
 - **A relay that fires only when usage is empty.** A tiny no-AI script notices that usage is empty, checks the machine has spare RAM, and starts one cheap run (at most once an hour) that summarises what each chat was doing into the inbox and works through a folder of handoff files. When Claude is back, you read the inbox first.
 - **Handoff files.** A task for a cheaper model needs: the task, the files, the rules, and a "done when". Cheaper models follow written instructions well and guess badly.
 - **What actually burned usage.** For us it was long sessions re-reading near-million-token histories plus sub-agent swarms. Scheduled tasks were under 1 %. So: one task per session; when a task is done or the session passes ~200k tokens, write a handoff note and start fresh; at most two sub-agents at once; run the free scripted checks before asking a model to check anything; open screenshots only for steps that failed or need a visual call, at half scale.
@@ -134,10 +134,11 @@ All small, MIT licensed, macOS first, standard-library Python or shell.
 |---|---|
 | duet (coming soon) | A terminal and Mac app that hosts a turn-by-turn conversation between Claude and ChatGPT using normal subscription logins (no API keys). |
 | [memguard](https://github.com/tsmartin29/memguard) | The RAM / swap / disk guard and the one-at-a-time heavy-job queue. |
-| claude-usage-meter (coming soon) | Menu-bar usage dot. |
-| claude-relay (coming soon) | Hand routine work to a cheaper model when usage runs out; results land in an inbox file. |
+| [claude-local-first](https://github.com/tsmartin29/claude-local-first) | Runs recurring work at the cheapest tier that can do it (local script, local model, cheap mode, then Claude), with a menu-bar usage meter whose suggestions you can decline. Includes cheap mode and the relay. |
 | [claude-safety-hooks](https://github.com/tsmartin29/claude-safety-hooks) | Hooks: no permanent deletes, dated backups, "test before done" reminder. |
 | claude-task-router (coming soon) | Rules engine: which model tier, effort and lane each task gets, from current usage. |
+
+Guides: [problem-first-framework](https://github.com/tsmartin29/problem-first-framework) (build only what solves a real, sourced pain) and [claude-business-launch](https://github.com/tsmartin29/claude-business-launch) (setting up a software business with Claude).
 
 Templates in this repo: `templates/claude-md-rules.md` (a block to paste into your global `CLAUDE.md`), `templates/routing-card.md`, `templates/handoff-file.md`, `templates/inbox-entry.md`, `templates/memory-file.md`.
 
