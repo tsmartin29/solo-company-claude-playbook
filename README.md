@@ -105,6 +105,7 @@ Usage limits are the real budget. What we learned:
 - **A relay that fires only when usage is empty.** A tiny no-AI script notices that usage is empty, checks the machine has spare RAM, and starts one cheap run (at most once an hour) that summarises what each chat was doing into the inbox and works through a folder of handoff files. When Claude is back, you read the inbox first.
 - **Handoff files.** A task for a cheaper model needs: the task, the files, the rules, and a "done when". Cheaper models follow written instructions well and guess badly.
 - **What actually burned usage.** For us it was long sessions re-reading near-million-token histories plus sub-agent swarms. Scheduled tasks were under 1 %. So: one task per session; when a task is done or the session passes ~200k tokens, write a handoff note and start fresh; at most two sub-agents at once; run the free scripted checks before asking a model to check anything; open screenshots only for steps that failed or need a visual call, at half scale.
+- **What it cost us.** Roughly 70% of the ~$2,300 it took to launch the company went to AI: the Claude plan plus extra usage from running 20+ sessions at once. It was the biggest cost by far, which is why the pacing rules above matter. Rough breakdown in [What it cost](https://github.com/tsmartin29/claude-business-launch#17-what-it-cost).
 - **Automate the routing.** claude-task-router (coming soon) encodes the bands and rules above as a config file and a small CLI.
 
 ## 7. Testing discipline
