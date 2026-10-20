@@ -153,6 +153,12 @@ If you only do five things:
 4. Watch your usage and write down what you do in amber and red *before* you are in red.
 5. Write the memory file the next time you say "no, never do that".
 
+## What changed
+
+- **2026-10-20, a guard can deadlock itself.** macOS can report memory pressure "warn" (level 2) for hours while several GB are free. A guard that pauses a job on every warn ends up with everything paused and nothing ever resuming. The fix in [memguard](https://github.com/tsmartin29/memguard): at level 2 one job may keep running while memory is comfortably above the pause line, and when nothing is running the smallest paused job is resumed. Lesson: for every "pause" rule, write the matching "resume" rule and test the state where everything is paused.
+- **2026-10-20, a tool must never open windows on your screen.** Scheduled helpers (reports, renders, health checks) run headless and write their result to a file or the inbox. If a job needs the human, it leaves a note; it does not pop up an app, grab focus or take the keyboard.
+- **2026-10-20, test safety hooks with realistic commands.** A delete-blocker read the redirection in `rm -rf build 2>/dev/null` as three files to delete and blocked a harmless command ([claude-safety-hooks](https://github.com/tsmartin29/claude-safety-hooks)). Feed a hook the messy commands your agents really write (redirections, `cd x && ...`, pipes), not only the tidy ones.
+
 ## Licence
 
 MIT. See `LICENSE`.
